@@ -17,7 +17,7 @@
         <javalin.version>7.0.1</javalin.version>
         <sl4j.simple.version>2.0.17</sl4j.simple.version>
 
-        <junit.jupiter.version>5.14.4</junit.jupiter.version>
+        <junit-5.version>5.14.4</junit-5.version>
         <assertj.version>3.27.7</assertj.version>
     </properties>
 
@@ -38,7 +38,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>${junit.jupiter.version}</version>
+            <version>${junit-5.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>${junit-5.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
