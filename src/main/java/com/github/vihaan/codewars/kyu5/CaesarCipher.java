@@ -1,5 +1,6 @@
 package com.github.vihaan.codewars.kyu5;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,12 +55,63 @@ import java.util.List;
  * Caesar Cipher : http://en.wikipedia.org/wiki/Caesar_cipher
  */
 public class CaesarCipher {
-  public static List<String> movingShift(String s, int shift) {
-		return null;
+	public static List<String> movingShift(String s, int shift) {
+		int n = s.length();
+		StringBuilder coded = new StringBuilder(n);
+		for (int i = 0; i < n; i++) {
+			char c = s.charAt(i);
+			int amt = shift + i;
+			if (Character.isUpperCase(c)) {
+				coded.append((char) ('A' + Math.floorMod(c - 'A' + amt, 26)));
+			} else if (Character.isLowerCase(c)) {
+				coded.append((char) ('a' + Math.floorMod(c - 'a' + amt, 26)));
+			} else {
+				coded.append(c);
+			}
+		}
+		return splitParts(coded.toString());
 	}
-	
+
 	public static String demovingShift(List<String> s, int shift) {
-		return null;
+		StringBuilder coded = new StringBuilder();
+		for (String part : s) {
+			coded.append(part);
+		}
+		int n = coded.length();
+		StringBuilder result = new StringBuilder(n);
+		for (int i = 0; i < n; i++) {
+			char c = coded.charAt(i);
+			int amt = shift + i;
+			if (Character.isUpperCase(c)) {
+				result.append((char) ('A' + Math.floorMod(c - 'A' - amt, 26)));
+			} else if (Character.isLowerCase(c)) {
+				result.append((char) ('a' + Math.floorMod(c - 'a' - amt, 26)));
+			} else {
+				result.append(c);
+			}
+		}
+		return result.toString();
+	}
+
+	private static List<String> splitParts(String coded) {
+		int n = coded.length();
+		int p = (n + 4) / 5;
+		int[] sizes = new int[] { p, p, p, p, 0 };
+		int excess = 4 * p - n;
+		int idx = 3;
+		while (excess > 0 && idx >= 0) {
+			sizes[idx]--;
+			excess--;
+			idx--;
+		}
+		sizes[4] = n - (sizes[0] + sizes[1] + sizes[2] + sizes[3]);
+		List<String> parts = new ArrayList<>();
+		int pos = 0;
+		for (int size : sizes) {
+			parts.add(coded.substring(pos, pos + size));
+			pos += size;
+		}
+		return parts;
 	}
 
 }
