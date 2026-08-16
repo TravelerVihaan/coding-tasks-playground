@@ -6,10 +6,10 @@ Each task has description in comment above class in java source file.
 
 
 ### [Unfinished tasks](https://www.codewars.com/users/TravelerVihaan/unfinished)
+
 ### kyu 5:
 [Four Letter Words ~ Anagrams](https://www.codewars.com/kata/5cb5ebc403c3ff477840393a)<br>
 [Snakes and Ladders](https://www.codewars.com/kata/587136ba2eefcb92a9000027)<br>
-[First Variation on Caesar Cipher](https://www.codewars.com/kata/5508249a98b3234f420000fb)<br>
 
 ### kyu 4:
 [Simplexer](https://www.codewars.com/kata/54b8204dcd7f514bf2000348)<br>
