@@ -1,0 +1,327 @@
+package com.github.vihaan.codewars.kyu5;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+/// Our Setup
+///
+/// Alice and Bob work in an office. When the workload is light and the boss isn't looking, they sometimes play simple word games for fun. This is one of those days!
+///
+/// However, yesterday Carol and Dan got wise to these sneaky shenanigans \~ and so today surprise challenged them (as a team) to one of their own games, which they like to call Anagrams! Alice and Bob reluctantly agreed if all four vowed to keep their illicit gamery completely hidden from the rest of the office...
+/// Today's Game
+///
+/// Team\_One will be Alice & Bob versus Team\_Two who are Carol & Dan, and the fun begins with a list of four-letter subject words. Going through the words on this list, the two teams compete in a game of points where one player from each team will successively take each other on one round at a time, recalling as many anagrams as possible of a subject word from their respective memories, which themselves are also lists of four-letter words.
+/// A Round
+///
+/// Within each round (Alice or Bob) will be matched with (Carol or Dan) in head-on competition over a single subject word, attempting to win the round for their team by earning the most round points.
+///
+/// Both players immediately get one (1) round point if they can simply recall the subject word itself from their memory.
+///
+/// Player One recalls as many anagrams of the subject word as they can, getting two (2) round points for each of them.
+///
+/// Player Two may now recall any further anagrams Player One did not know, getting three (3) round points for each.
+///
+/// The player with the highest round score wins the round, and one (1) final point will be contributed to their team's final score. If their round scores match, they tie, and no final points are awarded for the round.
+/// The Order
+///
+/// Because the first person to play in a round has the point advantage, The Order of Rounds (as shown below) was determined by having the teams take turns where one of their members gets to be first to play, and was then extended to give all players at least a chance to eventually compete against both members of their opposing team within a game:
+/// `
+/// 1. Alice Vs Carol
+/// 2. Carol Vs Bob
+/// 3. Bob   Vs Dan
+/// 4. Dan   Vs Alice
+/// `
+///
+/// `
+/// 5. Alice Vs Dan
+/// 6. Carol Vs Alice
+/// 7. Bob   Vs Carol
+/// 8. Dan   Vs Bob
+/// `
+///
+/// Because the amount of subject words will vary, each new game will begin with randomly chosen starting opponents, and from there continuously rotate through The Order of Rounds (as shown above) until all subject words have been used. The players Alice, Bob, Carol, and Dan will be represented by the integers 0, 1, 2, and 3, respectively, as exemplified in the example shown below.
+/// Your Task
+///
+/// To determine a winner by figuring out which team will score the most final points!
+/// Input
+///
+/// subjects
+///         a(n) array / list / tuple / vector of strings
+///         subjects will contain (1<=size<=50) words
+///     memories
+///         a(n) array / list / tuple / vector of the memories of the four players
+///         each memory is a(n) array / list / tuple / vector of strings
+///         all four players will have a memory of the same size at (1<=size<=400)
+///     players
+///         a(n) array / list / tuple / vector of a pairing of integers
+///         contains two (2) of the following integers representing the starting players:
+///                                  Team One                            Team Two
+///                                       0    for Alice                        2    for Carol
+///                                       1    for Bob                          3    for Dan
+///
+/// All strings in this kata will be valid English language  four-letter words.
+///       The subjects list will not contain words that are anagrams of each other.
+///       Words are from a shared source, thus some could appear in multiple lists,
+///       yet the memory and subjects lists will each not contain duplicated words.
+/// Output
+///
+/// An integer:
+///
+/// 0    if Team One wins (Alice & Bob)
+///       1    if Team Two wins (Carol & Dan)
+///     -1    if neither win because they tie
+///
+/// An Example
+///```
+/// subjects = ('darb', 'bust', 'spot', 'calo', 'oaky', 'mite',
+///             'meta', 'tael', 'gore', 'elan', 'code', 'demo')
+///
+/// alice = ('gore', 'stop', 'emit', 'tame', 'mode',
+///          'cola', 'drab', 'ergo', 'dome', 'bard',
+///          'okay', 'loca', 'stub', 'goer', 'coal')
+///
+/// bob   = ('lean', 'tela', 'stop', 'leat', 'code',
+///          'pots', 'coed', 'post', 'buts', 'tale',
+///          'stub', 'spot', 'tame', 'meat', 'mate')
+///
+/// carol = ('brad', 'tame', 'okay', 'bust', 'time',
+///          'lane', 'item', 'mate', 'ergo', 'darb',
+///          'tubs', 'team', 'gore', 'ogre', 'meta')
+///
+/// dan   = ('coal', 'oaky', 'tops', 'mode', 'spot',
+///          'code', 'demo', 'calo', 'teal', 'opts',
+///          'deco', 'cola', 'tale', 'kayo', 'late')
+///
+/// memories = (alice, bob, carol, dan)
+///
+/// players  = (0, 2)  #  this game begins with Alice Vs Carol
+/// ```
+///
+/// Nota Bene :
+///                     there are twelve possible scoring scenarios for this game,
+///                     all of which have been represented once each (out of order)
+///                     within the twelve rounds of this comprehensive example
+///
+/// The game begins with Alice of Team One going first against Carol of Team Two. In this particular case, only Carol happens to know the subject word, but because their round scores match, there is no change to the final score.
+///```
+/// Round One \~ "darb"
+///   Scenario 9 (second knows subject, players tie)
+///
+/// Alice    4 round points    2 each for "bard", "drab"
+///
+/// Carol    4 round points    1 for knowing "darb"
+///                                   3 for knowing "brad"
+///
+/// [0, 0] teams are tied
+///```
+///
+/// Following The Order of Rounds, Carol will now get to go first in taking on Bob. Bob is representing Team One which now must go in second place, but since he knows enough anagrams of the subject word, he wins the round for Team One.
+///
+/// ```
+/// Round Two \~ "bust"
+///   Scenario 5 (first knows subject, second wins)
+///
+/// Carol    3 round points    1 for knowing "bust"
+///                                   2 for knowing "tubs"
+///
+/// Bob      6 round points    3 each for "buts", "stub"
+///
+/// [1, 0] Team One winning```
+///
+/// Here both players know a lot of anagrams, but they still happen to tie the round.
+///
+/// ```
+/// Round Three \~ "spot"
+///   Scenario 3 (both know subject, players tie)
+///
+/// Bob      7 round points    1 for knowing "spot"
+///                                   2 each for "post", "pots", "stop"
+///
+/// Dan      7 round points    1 for knowing "spot"
+///                                   3 each for "opts", "tops"
+///
+/// [1, 0] Team One winning
+/// ```
+///
+/// Dan from Team Two finally gets to go first, bringing the score back to a tie by beating Alice.
+///
+/// ```
+/// Round Four \~ "calo"
+///   Scenario 4 (first knows subject, first wins)
+///
+/// Dan      5 round points    1 for knowing "calo"
+///                                   2 each for "coal", "cola"
+///
+/// Alice    3 round points    3 for knowing "loca"
+///
+/// [1, 1] teams are tied
+/// ```
+///
+/// A feisty Dan, this time following Alice, manages to grab a second win in a row from her, now putting Team Two in the lead.
+///
+/// ```
+/// Round Five \~ "oaky"
+///   Scenario 8 (second knows subject, second wins)
+///
+/// Alice   2 round points    2 for knowing "okay"
+///
+/// Dan     4 round points    1 for knowing "oaky"
+///                                  3 for knowing "kayo"
+///
+/// [1, 2] Team Two winning
+/// ```
+///
+/// Now Carol will continue the hot run of Team Two beating poor Alice yet again by just edging her out for another round.
+///
+/// ```Round Six \~ "mite"
+///   Scenario 10 (neither knows subject, first wins)
+///
+/// Carol    4 round points    2 each for "item", "time"
+///
+/// Alice    3 round points    3 for knowing "emit"
+///
+/// [1, 3] Team Two winning```
+///
+/// Bob reverses the energy by clawing out a win for Team One in this round by knowing a lot of anagrams for "meta" although without actually knowing "meta" itself.
+///
+/// ```Round Seven \~ "meta"
+///   Scenario 7 (second knows subject, first wins)
+///
+/// Bob      6 round points    2 each for "mate", "meat", "tame"
+///
+/// Carol    4 round points    1 for knowing "meta"
+///                                   3 for knowing "team"
+///
+/// [2, 3] Team Two winning```
+///
+/// Both players struggle here for a victory, but the round results in a tie, with Team Two holding onto the lead.
+///
+/// ```Round Eight \~ "tael"
+///   Scenario 12 (neither knows subject, players tie)
+///
+/// Dan      6 round points    2 each for "late", "tale", "teal"
+///
+/// Bob      6 round points    3 each for "leat", "tela"
+///
+/// [2, 3] Team Two winning```
+///
+/// This time Alice finally gets some revenge against Carol, evening out the final score.
+///
+/// ```Round Nine \~ "gore"
+///   Scenario 1 (both know subject, first wins)
+///
+/// Alice    5 round points    1 for knowing "gore"
+///                                   2 each for "ergo", "goer"
+///
+/// Carol    4 round points    1 for knowing "gore"
+///                                   3 for knowing "ogre"
+///
+/// [3, 3] teams are tied```
+///
+/// Although neither player can muster much muck against the subject word "elan", Bob nonetheless furthers the current winning rally for Team One, and takes them back into the lead.
+///
+/// ```Round Ten \~ "elan"
+///   Scenario 11 (neither knows subject, second wins)
+///
+/// Carol    2 round points    2 for knowing "lane"
+///
+/// Bob      3 round points    3 for knowing "lean"
+///
+/// [4, 3] Team One winning```
+///
+/// In this penultimate round, Dan manages to bring some hope of victory to Team Two by leveling the score with only one subject word to go!
+///
+/// ```Round Eleven \~ "code"
+///   Scenario 2 (both know subject, second wins)
+///
+/// Bob      3 round points    1 for knowing "code"
+///                                    2 for knowing "coed"
+///
+/// Dan      4 round points    1 for knowing "code"
+///                                    3 for knowing "deco"
+///
+/// [4, 4] teams are tied```
+///
+/// With the final round upon us, Dan gets to go first and also knows the subject word but otherwise not enough anagrams to get any more points than Alice can. Being tied going into and also for the final round, the outcome of the game itself results in a tie.
+///
+/// ```Round Twelve \~ "demo"
+///   Scenario 6 (first knows subject, players tie)
+///
+/// Dan      3 round points    1 for knowing "demo"
+///                                    2 for knowing "mode"
+///
+/// Alice    3 round points    3 for knowing "dome"
+///
+/// [4, 4] teams are tied```
+public class FourLetterWordsAnagrams {
+
+    public static int anagrams(String[] subjects, String[][] memories, int[] players) {
+        validateInput(players);
+
+        Map<Integer, List<String>> playerMemories = IntStream.range(0, memories.length).boxed()
+            .collect(Collectors.toMap(Function.identity(), i -> Arrays.asList(memories[i])));
+
+        int startingPlayer = players[0];
+        int secondsPlayer = players[1];
+
+        int teamOneScore = 0;
+        int teamTwoScore = 0;
+
+        for (String subject : subjects) {
+            var subjectCharArray = subject.toCharArray();
+            Arrays.sort(subjectCharArray);
+
+            var startingPlayerWords = findAnagrams(playerMemories.get(startingPlayer), subjectCharArray);
+            int startingPlayerScore = startingPlayerWords.stream().mapToInt(word -> subject.equals(word) ? 1 : 2).sum();
+
+            var secondPlayerWords = findAnagrams(playerMemories.get(secondsPlayer), subjectCharArray);
+            int secondPlayerScore = secondPlayerWords.stream().filter(word -> !startingPlayerWords.contains(word)).mapToInt(word -> subject.equals(word) ? 1 : 3).sum();
+
+            if (startingPlayerScore > secondPlayerScore) {
+                if (startingPlayer < 2)
+                    teamOneScore += 1;
+                else
+                    teamTwoScore += 1;
+            } else if (secondPlayerScore > startingPlayerScore) {
+                if (secondPlayerScore < 2)
+                    teamOneScore += 1;
+                else
+                    teamTwoScore += 1;
+            }
+
+            var tmpSecondPlayer = startingPlayer;
+            startingPlayer = secondsPlayer;
+            secondsPlayer = tmpSecondPlayer == 0 || tmpSecondPlayer == 2 ? tmpSecondPlayer + 1 : tmpSecondPlayer - 1;
+        }
+
+        if (teamOneScore > teamTwoScore) {
+            return 0;
+        } else if (teamTwoScore > teamOneScore) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    @NotNull
+    private static List<String> findAnagrams(List<String> playerMemories, char[] subjectCharArray) {
+        return playerMemories.stream().filter(word -> {
+            var wordCharArray = word.toCharArray();
+            Arrays.sort(wordCharArray);
+            return Arrays.equals(subjectCharArray, wordCharArray);
+        }).toList();
+    }
+
+
+    private static void validateInput(int[] players) {
+        if (players.length != 2 || (players[0] > 1 && players[1] > 1) || (players[0] <= 1 && players[1] <= 1)) {
+            throw new IllegalArgumentException();
+        }
+    }
+}
