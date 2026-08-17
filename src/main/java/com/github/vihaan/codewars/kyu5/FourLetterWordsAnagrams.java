@@ -1,8 +1,7 @@
 package com.github.vihaan.codewars.kyu5;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -267,37 +266,39 @@ public class FourLetterWordsAnagrams {
         Map<Integer, List<String>> playerMemories = IntStream.range(0, memories.length).boxed()
             .collect(Collectors.toMap(Function.identity(), i -> Arrays.asList(memories[i])));
 
-        int startingPlayer = players[0];
-        int secondsPlayer = players[1];
-
         int teamOneScore = 0;
         int teamTwoScore = 0;
+
+        roundsIterator = ROUNDS_ORDER.iterator();
+
+        Player[] currentPlayers = setUpRoundsIterator(players[0], players[1]);
 
         for (String subject : subjects) {
             var subjectCharArray = subject.toCharArray();
             Arrays.sort(subjectCharArray);
 
-            var startingPlayerWords = findAnagrams(playerMemories.get(startingPlayer), subjectCharArray);
+            var startingPlayerWords = findAnagrams(playerMemories.get(currentPlayers[0].getPlayerNumber()), subjectCharArray);
             int startingPlayerScore = startingPlayerWords.stream().mapToInt(word -> subject.equals(word) ? 1 : 2).sum();
 
-            var secondPlayerWords = findAnagrams(playerMemories.get(secondsPlayer), subjectCharArray);
-            int secondPlayerScore = secondPlayerWords.stream().filter(word -> !startingPlayerWords.contains(word)).mapToInt(word -> subject.equals(word) ? 1 : 3).sum();
+            var secondPlayerWords = findAnagrams(playerMemories.get(currentPlayers[1].getPlayerNumber()), subjectCharArray);
+            int secondPlayerScore = secondPlayerWords.stream()
+                .filter(word -> subject.equals(word) || !startingPlayerWords.contains(word))
+                .mapToInt(word -> subject.equals(word) ? 1 : 3)
+                .sum();
 
             if (startingPlayerScore > secondPlayerScore) {
-                if (startingPlayer < 2)
+                if (currentPlayers[0].team == 1)
                     teamOneScore += 1;
                 else
                     teamTwoScore += 1;
             } else if (secondPlayerScore > startingPlayerScore) {
-                if (secondPlayerScore < 2)
+                if (currentPlayers[1].team == 1)
                     teamOneScore += 1;
                 else
                     teamTwoScore += 1;
             }
 
-            var tmpSecondPlayer = startingPlayer;
-            startingPlayer = secondsPlayer;
-            secondsPlayer = tmpSecondPlayer == 0 || tmpSecondPlayer == 2 ? tmpSecondPlayer + 1 : tmpSecondPlayer - 1;
+            currentPlayers = nextRoundPlayers();
         }
 
         if (teamOneScore > teamTwoScore) {
@@ -309,7 +310,6 @@ public class FourLetterWordsAnagrams {
         }
     }
 
-    @NotNull
     private static List<String> findAnagrams(List<String> playerMemories, char[] subjectCharArray) {
         return playerMemories.stream().filter(word -> {
             var wordCharArray = word.toCharArray();
@@ -324,4 +324,54 @@ public class FourLetterWordsAnagrams {
             throw new IllegalArgumentException();
         }
     }
+
+    private enum Player {
+        ALICE(0, 1),
+        BOB(1, 1),
+        CAROL(2 , 2),
+        DAN(3, 2);
+
+        private final int playerNumber;
+        private final int team;
+
+        Player(int playerNumber, int team) {
+            this.playerNumber = playerNumber;
+            this.team = team;
+        }
+
+        public int getPlayerNumber() {
+            return playerNumber;
+        }
+
+    }
+
+    private static Player[] nextRoundPlayers() {
+        if (!roundsIterator.hasNext()) {
+            roundsIterator = ROUNDS_ORDER.iterator();
+        }
+        return roundsIterator.next();
+    }
+
+    private static Player[] setUpRoundsIterator(int player1, int player2) {
+         while (roundsIterator.hasNext()) {
+             var round = roundsIterator.next();
+             if (round[0].playerNumber == player1 && round[1].playerNumber == player2) {
+                return round;
+             }
+         }
+         throw new IllegalArgumentException();
+    }
+
+    private static final List<Player[]> ROUNDS_ORDER = List.of(
+        new Player[]{Player.ALICE, Player.CAROL},
+        new Player[]{Player.CAROL, Player.BOB},
+        new Player[]{Player.BOB, Player.DAN},
+        new Player[]{Player.DAN, Player.ALICE},
+        new Player[]{Player.ALICE, Player.DAN},
+        new Player[]{Player.CAROL, Player.ALICE},
+        new Player[]{Player.BOB, Player.CAROL},
+        new Player[]{Player.DAN, Player.BOB}
+    );
+
+    private static Iterator<Player[]> roundsIterator;
 }
