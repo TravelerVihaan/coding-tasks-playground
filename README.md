@@ -8,7 +8,6 @@ Each task has description in comment above class in java source file.
 ### [Unfinished tasks](https://www.codewars.com/users/TravelerVihaan/unfinished)
 
 ### kyu 5:
-[Four Letter Words ~ Anagrams](https://www.codewars.com/kata/5cb5ebc403c3ff477840393a)<br>
 [Snakes and Ladders](https://www.codewars.com/kata/587136ba2eefcb92a9000027)<br>
 
 ### kyu 4:
