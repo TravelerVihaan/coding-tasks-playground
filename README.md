@@ -7,9 +7,6 @@ Each task has description in comment above class in java source file.
 
 ### [Unfinished tasks](https://www.codewars.com/users/TravelerVihaan/unfinished)
 
-### kyu 5:
-[Snakes and Ladders](https://www.codewars.com/kata/587136ba2eefcb92a9000027)<br>
-
 ### kyu 4:
 [Simplexer](https://www.codewars.com/kata/54b8204dcd7f514bf2000348)<br>
 [Burrows-Wheeler-Transformation](https://www.codewars.com/kata/54ce4c6804fcc440a1000ecb)<br>
