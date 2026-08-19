@@ -18,7 +18,6 @@ Each task has description in comment above class in java source file.
 [Explosive Sum](https://www.codewars.com/kata/52ec24228a515e620b0005ef)<br>
 [Interfacing](https://www.codewars.com/kata/54c183dd3f069611c3000f97)<br>
 [Magnet particules in boxes](https://www.codewars.com/kata/56c04261c3fcf33f2d000534)<br>
-[Snail Sort](https://www.codewars.com/kata/521c2db8ddc89b9b7a0000c1)<br>
 [Longest Common Subsequence (Performance version)](https://www.codewars.com/kata/593ff8b39e1cc4bae9000070)<br>
 
 ### kyu 3
