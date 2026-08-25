@@ -1,11 +1,13 @@
 package com.github.vihaan.codewars.kyu4;
 
+import com.github.vihaan.util.UnfinishedTask;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@UnfinishedTask
 public class EquationTest {
     @Test
     public void sampleTests() {

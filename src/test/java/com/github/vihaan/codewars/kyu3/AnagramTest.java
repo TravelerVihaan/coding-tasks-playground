@@ -1,12 +1,13 @@
 package com.github.vihaan.codewars.kyu3;
 
+import com.github.vihaan.util.UnfinishedTask;
 import org.junit.Test;
 
 import java.math.BigInteger;
 
 import static org.junit.Assert.assertEquals;
 
-
+@UnfinishedTask
 public class AnagramTest {
   @Test
   public void testKnownInputs() {

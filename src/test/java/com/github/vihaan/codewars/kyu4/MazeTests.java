@@ -1,5 +1,6 @@
 package com.github.vihaan.codewars.kyu4;
 
+import com.github.vihaan.util.UnfinishedTask;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -7,8 +8,11 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+@UnfinishedTask
 @RunWith(Parameterized.class)
 public class MazeTests {
 
