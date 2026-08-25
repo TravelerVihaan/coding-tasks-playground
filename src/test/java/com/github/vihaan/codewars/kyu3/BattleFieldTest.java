@@ -1,11 +1,11 @@
 package com.github.vihaan.codewars.kyu3;
 
-import org.junit.jupiter.api.Disabled;
+import com.github.vihaan.util.UnfinishedTask;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Disabled("Unfinished coding task")
+@UnfinishedTask
 public class BattleFieldTest {
 
   private static int[][] battleField = {{1, 0, 0, 0, 0, 1, 1, 0, 0, 0},
