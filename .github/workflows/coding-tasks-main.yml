@@ -1,0 +1,68 @@
+name: coding-tasks-main
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      run_all_tests:
+        description: 'Run the full test suite (all tests), not just the codewars package'
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    name: Compile & Build
+    runs-on: [self-hosted]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Oracle JDK 26
+        uses: actions/setup-java@v4
+        with:
+          distribution: oracle
+          java-version: '26'
+          cache: maven
+
+      - name: Compile and build
+        run: mvn -B package -DskipTests
+
+  test-codewars:
+    name: Run codewars tests (automatic)
+    needs: build
+    runs-on: [self-hosted]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Oracle JDK 26
+        uses: actions/setup-java@v4
+        with:
+          distribution: oracle
+          java-version: '26'
+          cache: maven
+
+      - name: Run codewars tests
+        run: mvn -B test -Dtest="com.github.vihaan.codewars.**" -DfailIfNoTests=true
+
+  test-all:
+    name: Run full test suite (manual trigger only)
+    needs: build
+    runs-on: [self-hosted]
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_all_tests == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Oracle JDK 26
+        uses: actions/setup-java@v4
+        with:
+          distribution: oracle
+          java-version: '26'
+          cache: maven
+
+      - name: Run full test suite
+        run: mvn -B test
