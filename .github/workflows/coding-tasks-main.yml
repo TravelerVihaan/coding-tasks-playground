@@ -25,7 +25,7 @@ jobs:
         with:
           distribution: oracle
           java-version: '26'
-          cache: maven
+          overwrite-settings: false
 
       - name: Compile and build
         run: mvn -B package -DskipTests
@@ -34,6 +34,9 @@ jobs:
     name: Run codewars tests (automatic)
     needs: build
     runs-on: [self-hosted]
+    permissions:
+      checks: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,16 +46,41 @@ jobs:
         with:
           distribution: oracle
           java-version: '26'
-          cache: maven
+          overwrite-settings: false
 
       - name: Run codewars tests
         run: mvn -B test -Dtest="com.github.vihaan.codewars.**" -DfailIfNoTests=true
+
+      - name: Publish test report
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: 'target/surefire-reports/TEST-*.xml'
+          check_name: 'Codewars Test Report'
+          job_summary: true
+          detailed_summary: true
+
+      - name: Summarize failing classes by kyu package
+        if: always()
+        shell: bash
+        run: .github/workflows/scripts/failed-tests-by-package.sh
+
+      - name: Upload failing classes summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failed-tests-by-package-codewars
+          path: failed-tests-report.md
+          if-no-files-found: ignore
 
   test-all:
     name: Run full test suite (manual trigger only)
     needs: build
     runs-on: [self-hosted]
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_all_tests == 'true'
+    permissions:
+      checks: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -62,7 +90,29 @@ jobs:
         with:
           distribution: oracle
           java-version: '26'
-          cache: maven
+          overwrite-settings: false
 
       - name: Run full test suite
         run: mvn -B test
+
+      - name: Publish test report
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: 'target/surefire-reports/TEST-*.xml'
+          check_name: 'Full Test Suite Report'
+          job_summary: true
+          detailed_summary: true
+
+      - name: Summarize failing classes by kyu package
+        if: always()
+        shell: bash
+        run: .github/workflows/scripts/failed-tests-by-package.sh
+
+      - name: Upload failing classes summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failed-tests-by-package-full
+          path: failed-tests-report.md
+          if-no-files-found: ignore
