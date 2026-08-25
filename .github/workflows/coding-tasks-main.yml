@@ -25,7 +25,7 @@ jobs:
         with:
           distribution: oracle
           java-version: '26'
-          cache: maven
+          overwrite-settings: false
 
       - name: Compile and build
         run: mvn -B package -DskipTests
@@ -46,7 +46,7 @@ jobs:
         with:
           distribution: oracle
           java-version: '26'
-          cache: maven
+          overwrite-settings: false
 
       - name: Run codewars tests
         run: mvn -B test -Dtest="com.github.vihaan.codewars.**" -DfailIfNoTests=true
@@ -90,7 +90,7 @@ jobs:
         with:
           distribution: oracle
           java-version: '26'
-          cache: maven
+          overwrite-settings: false
 
       - name: Run full test suite
         run: mvn -B test
