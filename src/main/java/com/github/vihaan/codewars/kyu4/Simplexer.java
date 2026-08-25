@@ -1,6 +1,7 @@
 package com.github.vihaan.codewars.kyu4;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -16,7 +17,7 @@ import java.util.regex.Pattern;
 /// </token>
 ///
 /// Tokens are represented by Token objects, which are preloaded for you and take the following shape:
-///
+///```
 /// public class Token {
 ///
 /// public final String text;
@@ -27,12 +28,12 @@ import java.util.regex.Pattern;
 ///         this.type = type;
 ///     }
 /// }
-///
+///```
 /// Token.text is the value of the matched portion of the expression
 ///     Token.type is the type of the token (see below)
 ///
 /// Language Grammar
-///
+///```
 /// The language for this task has a simple grammar, consisting of the following constructs and their associated token types:
 ///
 /// Type         Construct
@@ -53,14 +54,14 @@ import java.util.regex.Pattern;
 /// identifier:  Any sequence of alphanumeric characters, as well as '\_' and '$'
 ///              \- Must not start with a digit
 ///              \- Make sure that keywords and booleans aren't matched as identifiers
-///
+///```
 /// Notes
 ///
 /// Individual constructs are disambiguated by whitespace if necessary, so
-///         true123 is an identifier, as opposed to boolean followed by integer
-///         123true is an integer followed by boolean
-///         "123"true is a string followed by boolean
-///         x+y is identifier op identifier
+///         `true123` is an identifier, as opposed to boolean followed by integer
+///         `123true` is an integer followed by boolean
+///         `"123"true` is a string followed by boolean
+///         `x+y` is identifier op identifier
 ///
 /// Any character is permissable between double quotes, including keywords, numbers and arbitrary whitespace, so "true" and "123" are strings. The quotes "" are to be included in the Token.
 ///
@@ -72,32 +73,32 @@ import java.util.regex.Pattern;
 /// That means the input will not contain any surprising characters, there is no need for error handling, and quotes will always appear in balanced pairs. This does not mean that the input needs to make semantic or syntactic sense. For example, if 123) return else"five")( is valid input for this task.
 ///
 /// After all, the job of a lexer is not to interpret the given input, merely transform it into tokens that could then be passed on to e.g. a parser, which would then check that the tokens received are syntactically valid and imbue them with semantics.
-public class Simplexer
-        implements Iterator<Simplexer.Token> {
-    private final List<String> tokens;
-    private int currentIndex = 0;
+public class Simplexer implements Iterator<Simplexer.Token> {
+
+    private String currentBuffer;
 
     public Simplexer(String buffer) {
-        tokens = new ArrayList<>();
-        Pattern p = Pattern.compile("\"[^\"]*\"|\\S+");
-        Matcher m = p.matcher(buffer);
-        while (m.find()) {
-            tokens.add(m.group());
-        }
-
+        this.currentBuffer = buffer;
     }
 
     @Override
     public boolean hasNext() {
-        // TODO
-        return false;
+        return !currentBuffer.isEmpty();
     }
 
     @Override
     public Token next() {
-        // TODO
-        // Creates a token with (text, type).
-        return new Token("x", "identifier");
+        Token nextToken = TOKEN_TYPES_PRIORITY.stream().map(tokenType -> {
+            Pattern p = Pattern.compile(tokenType.getPattern());
+            Matcher m = p.matcher(currentBuffer);
+            if (m.lookingAt()) {
+                String tokenText = m.group();
+                return new Token(tokenText, tokenType.getName());
+            }
+            return null;
+        }).findFirst().orElseThrow();
+        currentBuffer = currentBuffer.replaceFirst(nextToken.text, "");
+        return nextToken;
     }
 
     public static class Token {
@@ -110,5 +111,39 @@ public class Simplexer
             this.type = type;
         }
     }
+
+    private enum TokenType {
+        INTEGER("\\d+", 3),
+        BOOLEAN("\\b(true|false)\\b", 2),
+        STRING("\"[^\"]*\"", 1),
+        OPERATOR("[+\\-*/%()=]", 3),
+        KEYWORD("\\b(if|else|for|while|return|func|break)\\b", 2),
+        WHITESPACE("[ \\t\\n]+", 3),
+        IDENTIFIER("[a-zA-Z_$][a-zA-Z0-9_$]*", 3);
+
+        private final String pattern;
+        private final int priority;
+
+        TokenType(String pattern,int priority) {
+            this.pattern = pattern;
+            this.priority = priority;
+        }
+
+        public String getPattern() {
+            return pattern;
+        }
+
+        public int getPriority() {
+            return priority;
+        }
+
+        public String getName() {
+            return this.name().toLowerCase();
+        }
+    }
+
+    private static final List<TokenType> TOKEN_TYPES_PRIORITY = Arrays.stream(TokenType.values())
+        .sorted(Comparator.comparingInt(TokenType::getPriority))
+        .toList();
 
 }
