@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 
 @UnfinishedTask
 public class AnagramTest {
+
   @Test
   public void testKnownInputs() {
     Anagrams anagram = new Anagrams();

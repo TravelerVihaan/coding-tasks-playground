@@ -8,7 +8,6 @@ Each task has description in comment above class in java source file.
 ### [Unfinished tasks](https://www.codewars.com/users/TravelerVihaan/unfinished)
 
 ### kyu 4:
-[Simplexer](https://www.codewars.com/kata/54b8204dcd7f514bf2000348)<br>
 [Burrows-Wheeler-Transformation](https://www.codewars.com/kata/54ce4c6804fcc440a1000ecb)<br>
 [Differentiate a polynomial](https://www.codewars.com/kata/566584e3309db1b17d000027)<br>
 [Count ones in a segment](https://www.codewars.com/kata/596d34df24a04ee1e3000a25)<br>
