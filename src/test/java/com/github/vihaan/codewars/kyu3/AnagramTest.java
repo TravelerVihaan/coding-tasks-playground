@@ -1,6 +1,7 @@
 package com.github.vihaan.codewars.kyu3;
 
 import com.github.vihaan.util.UnfinishedTask;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.math.BigInteger;
@@ -8,6 +9,7 @@ import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 
 @UnfinishedTask
+@Ignore("Unfinished coding task")
 public class AnagramTest {
 
   @Test

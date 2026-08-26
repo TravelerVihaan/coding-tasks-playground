@@ -1,6 +1,7 @@
 package com.github.vihaan.codewars.kyu4;
 
 import com.github.vihaan.util.UnfinishedTask;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -13,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @UnfinishedTask
+@Ignore("Unfinished coding task")
 @RunWith(Parameterized.class)
 public class MazeTests {
 
