@@ -1,9 +1,11 @@
 package com.github.vihaan.codewars.kyu4;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -75,29 +77,38 @@ import java.util.regex.Pattern;
 /// After all, the job of a lexer is not to interpret the given input, merely transform it into tokens that could then be passed on to e.g. a parser, which would then check that the tokens received are syntactically valid and imbue them with semantics.
 public class Simplexer implements Iterator<Simplexer.Token> {
 
-    private String currentBuffer;
+    private int currentPosition = 0;
+    private final List<Token> tokens = new ArrayList<>();
 
     public Simplexer(String buffer) {
-        this.currentBuffer = buffer;
+        if (buffer == null) {
+            return;
+        }
+        var currentBuffer = buffer;
+        while (!currentBuffer.isEmpty()) {
+            for (TokenType tokenType : TOKEN_TYPES_PRIORITY) {
+                Pattern p = tokenType.getPattern();
+                Matcher m = p.matcher(currentBuffer);
+                if (m.lookingAt()) {
+                    String tokenText = m.group();
+                    Token newToken = new Token(tokenText, tokenType.getName());
+                    currentBuffer = currentBuffer.replaceFirst(tokenType.getPattern().toString(), "");
+                    tokens.add(newToken);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
     public boolean hasNext() {
-        return !currentBuffer.isEmpty();
+        return currentPosition < tokens.size();
     }
 
     @Override
     public Token next() {
-        Token nextToken = TOKEN_TYPES_PRIORITY.stream().map(tokenType -> {
-            Pattern p = Pattern.compile(tokenType.getPattern());
-            Matcher m = p.matcher(currentBuffer);
-            if (m.lookingAt()) {
-                String tokenText = m.group();
-                return new Token(tokenText, tokenType.getName());
-            }
-            return null;
-        }).findFirst().orElseThrow();
-        currentBuffer = currentBuffer.replaceFirst(nextToken.text, "");
+        var nextToken = tokens.get(currentPosition);
+        currentPosition += 1;
         return nextToken;
     }
 
@@ -110,6 +121,26 @@ public class Simplexer implements Iterator<Simplexer.Token> {
             this.text = text;
             this.type = type;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == null || getClass() != o.getClass()) return false;
+            Token token = (Token) o;
+            return Objects.equals(text, token.text) && Objects.equals(type, token.type);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(text, type);
+        }
+
+        @Override
+        public String toString() {
+            return "Token{" +
+                "text='" + text + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+        }
     }
 
     private enum TokenType {
@@ -121,15 +152,15 @@ public class Simplexer implements Iterator<Simplexer.Token> {
         WHITESPACE("[ \\t\\n]+", 3),
         IDENTIFIER("[a-zA-Z_$][a-zA-Z0-9_$]*", 3);
 
-        private final String pattern;
+        private final Pattern pattern;
         private final int priority;
 
         TokenType(String pattern,int priority) {
-            this.pattern = pattern;
+            this.pattern = Pattern.compile(pattern);
             this.priority = priority;
         }
 
-        public String getPattern() {
+        public Pattern getPattern() {
             return pattern;
         }
 
