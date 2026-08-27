@@ -1,11 +1,11 @@
 package com.github.vihaan.codewars.kyu4;
 
-import com.github.vihaan.util.UnfinishedTask;
+import com.github.vihaan.codewars.kyu4.BurrowsWheeler.BWT;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@UnfinishedTask
+
 public class BurrowsWheelerTest {
 
     @Test
@@ -15,10 +15,10 @@ public class BurrowsWheelerTest {
         assertEquals("Mellow Yellow", BurrowsWheeler.decode("ww MYeelllloo", 1));
     }
 
-//    @Test
-//    public void encodeTests() {
-//        assertEquals(new BWT("nnbbraaaa", 4),     BurrowsWheeler.encode("bananabar"));
-//        assertEquals(new BWT("e emnllbduuHB", 2), BurrowsWheeler.encode("Humble Bundle"));
-//        assertEquals(new BWT("ww MYeelllloo", 1), BurrowsWheeler.encode("Mellow Yellow"));
-//    }
+    @Test
+    public void encodeTests() {
+        assertEquals(new BWT("nnbbraaaa", 4),     BurrowsWheeler.encode("bananabar"));
+        assertEquals(new BWT("e emnllbduuHB", 2), BurrowsWheeler.encode("Humble Bundle"));
+        assertEquals(new BWT("ww MYeelllloo", 1), BurrowsWheeler.encode("Mellow Yellow"));
+    }
 }
