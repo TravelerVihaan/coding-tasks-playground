@@ -1,5 +1,8 @@
 package com.github.vihaan.codewars.kyu4;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /// Motivation
@@ -68,13 +71,61 @@ import java.util.Objects;
 public class BurrowsWheeler {
     
     public static BWT encode(String s) {
-        // Your code here!
-        return null;          // new BWT("stuff", -1);
+        if (s == null || s.isEmpty()) {
+            return new BWT(s, 0);
+        }
+        List<String> transformations = new ArrayList<>();
+        transformations.add(s);
+        String current = s;
+        for (int i = 0; i < s.length() - 1; i++) {
+            current = current.substring(s.length() - 1) + current.substring(0, s.length() - 1);
+            transformations.add(current);
+        }
+
+        transformations.sort(String::compareTo);
+
+        int index = transformations.indexOf(s);
+        StringBuilder sb = new StringBuilder();
+        transformations.forEach(transformation -> sb.append(transformation.substring(transformation.length() - 1)));
+
+        return new BWT(sb.toString(), index);          // new BWT("stuff", -1);
     }
     
     public static String decode(String s, int n) {
-        // Your code here!
-        return null;
+        if (s == null || s.isEmpty() || n < 0) {
+            return "";
+        }
+        char[] lastColumn = s.toCharArray();
+        char[] firstColumn = lastColumn.clone();
+        Arrays.sort(firstColumn);
+        char currentChar = firstColumn[n];
+        int currentIndex = n;
+
+        StringBuilder result = new StringBuilder(String.valueOf(currentChar));
+
+        for (int j = 0 ; j < lastColumn.length - 1 ; j++) {
+
+            int counter = 0;
+            for (int i = 0; i < currentIndex; i++) {
+                if (firstColumn[i] == currentChar) {
+                    counter++;
+                }
+            }
+            int sCounter = 0;
+            for (int i = 0; i < lastColumn.length; i++) {
+                if (lastColumn[i] == currentChar) {
+                    if (counter == sCounter) {
+                        currentChar = firstColumn[i];
+                        result.append(currentChar);
+                        currentIndex = i;
+                        break;
+                    } else {
+                        sCounter++;
+                    }
+                }
+            }
+        }
+        return result.toString();
     }
 
     public static class BWT {
