@@ -18,7 +18,27 @@ import java.math.BigInteger;
 public class Equation {
     
     public static BigInteger differentiate(String equation, long x) {
-        // Your code here!
-        return null;
+        String[] parts = equation.split("(?=[+-])");
+        BigInteger result = BigInteger.ZERO;
+
+        for (String part : parts) {
+                if (part.contains("x^")) {
+                    var temp = part.split("x\\^");
+                    var power = Integer.parseInt(temp[1]);
+
+                    var multiplier = ("".equals(temp[0]) || "-".equals(temp[0]) ?
+                        temp[0].contains("-") ? -1 : 1
+                        : Long.parseLong(temp[0])) * power;
+                    power = power - 1;
+                    var partResult = BigInteger.valueOf(x).pow(power).multiply(BigInteger.valueOf(multiplier));
+                    result = result.add(partResult);
+                } else if (part.contains("x")) {
+
+                    var multiplier = Long.parseLong(part.startsWith("x") || part.startsWith("-x") ? part.replace("x", "1") : part.replace("x", ""));
+                    result = result.add(BigInteger.valueOf(multiplier));
+                }
+
+        }
+        return result;
     }
 }

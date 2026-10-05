@@ -8,7 +8,6 @@ Each task has description in comment above class in java source file.
 ### [Unfinished tasks](https://www.codewars.com/users/TravelerVihaan/unfinished)
 
 ### kyu 4:
-[Differentiate a polynomial](https://www.codewars.com/kata/566584e3309db1b17d000027)<br>
 [Count ones in a segment](https://www.codewars.com/kata/596d34df24a04ee1e3000a25)<br>
 [Functional streams](https://www.codewars.com/kata/5512ec4bbe2074421d00028c)<br>
 [Simple maze](https://www.codewars.com/kata/56bb9b7838dd34d7d8001b3c)<br>
