@@ -18,13 +18,13 @@ jobs:
     runs-on: [self-hosted]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Oracle JDK 26
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: oracle
-          java-version: '26'
+          java-version: '27'
           overwrite-settings: false
 
       - name: Compile and build
@@ -39,13 +39,13 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Oracle JDK 26
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: oracle
-          java-version: '26'
+          java-version: '27'
           overwrite-settings: false
 
       - name: Run codewars tests
@@ -53,7 +53,7 @@ jobs:
 
       - name: Publish test report
         if: always()
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@v6
         with:
           report_paths: 'target/surefire-reports/TEST-*.xml'
           check_name: 'Codewars Test Report'
@@ -67,7 +67,7 @@ jobs:
 
       - name: Upload failing classes summary
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: failed-tests-by-package-codewars
           path: failed-tests-report.md
@@ -83,13 +83,13 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Oracle JDK 26
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: oracle
-          java-version: '26'
+          java-version: '27'
           overwrite-settings: false
 
       - name: Run full test suite
@@ -97,7 +97,7 @@ jobs:
 
       - name: Publish test report
         if: always()
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@v6
         with:
           report_paths: 'target/surefire-reports/TEST-*.xml'
           check_name: 'Full Test Suite Report'
@@ -111,7 +111,7 @@ jobs:
 
       - name: Upload failing classes summary
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: failed-tests-by-package-full
           path: failed-tests-report.md

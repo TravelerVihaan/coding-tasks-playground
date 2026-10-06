@@ -10,7 +10,8 @@ OUT="failed-tests-report.md"
 
 echo "## Failed test classes by package" > "$OUT"
 
-declare -A FAILGROUPS
+declare -A FAILGROUPS=()
+FAIL_COUNT=0
 
 if [ -d "$REPORT_DIR" ]; then
   for txt in "$REPORT_DIR"/*.txt; do
@@ -26,11 +27,12 @@ if [ -d "$REPORT_DIR" ]; then
       pkg=$(echo "$fqcn" | sed -n 's/^com\.github\.vihaan\.codewars\.\([^.]*\)\..*/\1/p')
       [ -z "$pkg" ] && pkg="(other)"
       FAILGROUPS["$pkg"]+="${fqcn}"$'\n'
+      FAIL_COUNT=$((FAIL_COUNT + 1))
     fi
   done
 fi
 
-if [ ${#FAILGROUPS[@]} -eq 0 ]; then
+if [ "$FAIL_COUNT" -eq 0 ]; then
   echo "No failing test classes. ✅" >> "$OUT"
 else
   for pkg in $(printf '%s\n' "${!FAILGROUPS[@]}" | sort); do
