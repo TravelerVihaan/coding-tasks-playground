@@ -18,8 +18,10 @@ import java.util.stream.LongStream;
 public class BitCount {
 
     public static BigInteger countOnes(long left, long right) {
+        System.out.printf("Left: %d, Right: %d%n", left, right);
         return BigInteger.valueOf(LongStream
                 .rangeClosed(left, right)
+                .parallel()
                 .mapToObj(Long::toBinaryString)
                 .mapToLong(binaryNumber -> binaryNumber.replaceAll("0","").length()).sum());
     }
