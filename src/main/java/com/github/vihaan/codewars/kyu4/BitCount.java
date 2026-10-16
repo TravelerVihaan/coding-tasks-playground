@@ -19,6 +19,7 @@ public class BitCount {
 
     public static BigInteger countOnes(long left, long right) {
         System.out.printf("Left: %d, Right: %d%n", left, right);
+        System.out.printf("Left: %s, Right: %s%n", Long.toBinaryString(left), Long.toBinaryString(right));
         return BigInteger.valueOf(LongStream
                 .rangeClosed(left, right)
                 .parallel()
