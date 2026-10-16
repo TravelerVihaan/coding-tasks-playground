@@ -1,9 +1,9 @@
 package com.github.vihaan.codewars.kyu3;
 
 import com.github.vihaan.codewars.kyu4.ChangeCounter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ChangeCounterTests {
 

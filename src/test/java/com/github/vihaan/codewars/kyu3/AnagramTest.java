@@ -1,26 +1,26 @@
 package com.github.vihaan.codewars.kyu3;
 
 import com.github.vihaan.util.UnfinishedTask;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @UnfinishedTask
-@Ignore("Unfinished coding task")
+@Disabled("Unfinished coding task")
 public class AnagramTest {
 
   @Test
   public void testKnownInputs() {
     Anagrams anagram = new Anagrams();
     
-    assertEquals("Position for 'A' incorrect", BigInteger.ONE, anagram.listPosition("A"));
-    assertEquals("Position for 'ABAB' incorrect", BigInteger.valueOf(2), anagram.listPosition("ABAB"));
-    assertEquals("Position for 'AAAB' incorrect", BigInteger.ONE, anagram.listPosition("AAAB"));
-    assertEquals("Position for 'BAAA' incorrect", BigInteger.valueOf(4), anagram.listPosition("BAAA"));
-    assertEquals("Position for 'QUESTION' incorrect", BigInteger.valueOf(24572), anagram.listPosition("QUESTION"));
-    assertEquals("Position for 'BOOKKEEPER' incorrect", BigInteger.valueOf(10743), anagram.listPosition("BOOKKEEPER"));
+    assertEquals(BigInteger.ONE, anagram.listPosition("A"), "Position for 'A' incorrect");
+    assertEquals(BigInteger.valueOf(2), anagram.listPosition("ABAB"), "Position for 'ABAB' incorrect");
+    assertEquals(BigInteger.ONE, anagram.listPosition("AAAB"), "Position for 'AAAB' incorrect");
+    assertEquals(BigInteger.valueOf(4), anagram.listPosition("BAAA"), "Position for 'BAAA' incorrect");
+    assertEquals(BigInteger.valueOf(24572), anagram.listPosition("QUESTION"), "Position for 'QUESTION' incorrect");
+    assertEquals(BigInteger.valueOf(10743), anagram.listPosition("BOOKKEEPER"), "Position for 'BOOKKEEPER' incorrect");
   }
 }

@@ -1,7 +1,7 @@
 package com.github.vihaan.codewars.kyu4;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
@@ -37,7 +37,7 @@ public class SnailTest {
     public void test(int[][] array, int[] result) {
         String text = int2dToString(array) + " should be sorted to " + Arrays.toString(result);
         System.out.println(text);
-        Assert.assertArrayEquals( result, Snail.snail(array));
+        Assertions.assertArrayEquals( result, Snail.snail(array));
     }
 
    
